@@ -41,11 +41,32 @@ Hello World page
 
 =cut
 
-sub hello :Global {
+sub hello : Path('hello') {
     my ( $self, $c ) = @_;
 
     $c->response->body("Hello, World!");
 }
+
+
+sub about : Path('about') {
+   my ( $self, $c ) = @_;
+    $c->response->body("This is the 'About' page" );
+        $c->stash(template => 'about.tt');
+}
+    
+sub gallery : Path('gallery') {
+   my ( $self, $c ) = @_;
+       $c->response->body("This is the 'Gallery' page" );
+}
+    
+sub contact_info : Path('contact_info') {
+   my ( $self, $c ) = @_;
+       $c->response->body("This is the 'Registration' page.
+       For now it will just
+       collect information about the viewer of the web site"
+       );
+}
+    
 
 =head2 default
 
