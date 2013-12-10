@@ -33,6 +33,7 @@ sub index :Path :Args(0) {
 
     # Hello World
     $c->response->body( $c->welcome_message );
+    #die "oops";
 }
 
 =head2 hello world
@@ -44,6 +45,8 @@ Hello World page
 sub hello : Path('hello') {
     my ( $self, $c ) = @_;
 
+#    $c->stash(template => 'hello.tt');
+
     $c->response->body("Hello, World!");
 }
 
@@ -53,8 +56,8 @@ sub about : Path('about') {
 #    $c->response->body("This is the 'About' page" );
     $c->response->body("
  The idea behind HoneyDoPetSitting is that during the time I am house or pet sitting while you are out of town I'll take care of the list of minor repairs, painting, organizing, cleaning that you don't have time to do yourself. Have a garage that's a mess? I'll build shelving or install other storage and organize your belongings. Have a bedroom that needs painting? Got it. Rotten fencing, siding, other repairs; I can do that. Simple door or window adjustments or complete refurbishing, I'm expert at that.
-My house sitting rates are reasonable. I take in the mail and news papers, take out the trash, water the plants, keep the place clean and operating smoothly. My pet sitting rates are comparable with the rates charged by local kennels. Plus your pets stay in their homes. They get playtime, exercise, grooming, and attention. I treat them like my own. There is no interruption in their normal feeding or medication requirements. I take care of cats, dogs, fish, and outside animals like chickens, goats, and rabbits.
-If you don't have a honeydo list, I will continue my normal work schedule. This is usually 5 to 8 hours away from the house while caring for your animals. I also do web development and programming so there may be times when I am working on one of those projects from your kitchen table.
+<p>My house sitting rates are reasonable. I take in the mail and news papers, take out the trash, water the plants, keep the place clean and operating smoothly. My pet sitting rates are comparable with the rates charged by local kennels. Plus your pets stay in their homes. They get playtime, exercise, grooming, and attention. I treat them like my own. There is no interruption in their normal feeding or medication requirements. I take care of cats, dogs, fish, and outside animals like chickens, goats, and rabbits.</p>
+<p>If you don't have a honeydo list, I will continue my normal work schedule. This is usually 5 to 8 hours away from the house while caring for your animals. I also do web development and programming so there may be times when I am working on one of those projects from your kitchen table.</p>
 I started working on this website during the summer of 2013. I have experience in the building trades going back to 1976. I have been an enthusiastic pet owner most of my life. I have taken care of the houses and animals of friends and family for fun or profit since the early 2000's. ");
         $c->stash(template => 'about.tt');
 }
