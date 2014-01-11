@@ -24,11 +24,15 @@ extends 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
+=item * L<DBIx::Class::PassphraseColumn>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
 
 =head1 TABLE: C<book>
 
@@ -54,6 +58,16 @@ __PACKAGE__->table("book");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 created
+
+  data_type: 'timestamp'
+  is_nullable: 1
+
+=head2 updated
+
+  data_type: 'timestamp'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -63,6 +77,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "rating",
   { data_type => "integer", is_nullable => 1 },
+  "created",
+  { data_type => "timestamp", is_nullable => 1 },
+  "updated",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -105,8 +123,8 @@ Composing rels: L</book_authors> -> author
 __PACKAGE__->many_to_many("authors", "book_authors", "author");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07038 @ 2013-12-07 16:41:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qO+qgiv3pWDRiNw2KXv4IA
+# Created by DBIx::Class::Schema::Loader v0.07038 @ 2014-01-08 21:23:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1bwtFIZxLV1mzUuap9nuNw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -119,5 +137,59 @@ __PACKAGE__->many_to_many("authors", "book_authors", "author");
 #       above
 #  You must already have the has_many() defined to use a many_to_many().
 #__PACKAGE__->many_to_many(authors => 'book_authors', 'author');
+=head2 author_count
+
+Return the number of authors for the current book
+
+=cut
+
+sub author_count {
+    my ($self) = @_;
+    # Use the 'many_to_many' relationship to fetch all of the authors for the
+    # current and the 'count' method in DBIx::Class::ResultSet to get a SQL
+    # COUNT
+    return $self->authors->count;
+}
+
+=head2 author_list
+
+Return a comma-separated list of authors for the current book
+
+=cut
+
+sub author_list {
+    my ($self) = @_;
+    
+    # Loop through all authors for the current book, calling all the
+    # 'full_name' Result Class method for each
+    my @names;
+    foreach my $author ($self->authors) {
+        push(@names, $author->full_name);
+    }
+    return join(', ', @names);
+}
+=head2 delete_allowed_by
+
+Can the specified user delete the current book?
+
+=cut
+
+sub delete_allowed_by {
+    my ($self, $user) = @_;
+
+    # Only allow delete if user has 'admin' role
+    return $user->has_role('admin');
+}
+
+#
+# Enable automatic date handling
+#
+__PACKAGE__->add_columns(
+    "created",
+    { data_type => 'timestamp', set_on_create => 1 },
+    "updated",
+    { data_type => 'timestamp', set_on_create => 1, set_on_update => 1 },
+);
+
 __PACKAGE__->meta->make_immutable;
 1;

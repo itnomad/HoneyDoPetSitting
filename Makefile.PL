@@ -9,6 +9,7 @@ use Module::Install::Catalyst; # Complain loudly if you don't have
 name 'HoneyDoPetSitting';
 all_from 'lib/HoneyDoPetSitting.pm';
 
+requires 'Perl6::Junction';
 requires 'Catalyst::Devel';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::Runtime' => '5.90042';
@@ -16,6 +17,14 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::StackTrace';
 requires 'Catalyst::Action::RenderView';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Plugin::Session';
+requires 'Catalyst::Plugin::Session::Store::File';
+requires 'Catalyst::Plugin::Session::State::Cookie';
+requires 'Catalyst::Plugin::StatusMessage';
+requires 'Catalyst::Authentication::Realm::SimpleDB';
+requires 'DBIx::Class::PassphraseColumn';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen

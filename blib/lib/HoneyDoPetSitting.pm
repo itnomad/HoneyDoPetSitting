@@ -22,6 +22,15 @@ use Catalyst qw/
     Static::Simple
 
     StackTrace
+    
+    Authentication
+    Authorization::Roles
+
+    Session
+    Session::Store::File
+    Session::State::Cookie
+
+    StatusMessage
 /;
 
 extends 'Catalyst';
@@ -43,6 +52,26 @@ __PACKAGE__->config(
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
 );
+
+__PACKAGE__->config(
+    #configure the view
+    'View::HTML' => {
+        #Set the location for TT files
+        INCLUDE_PATH => [
+        __PACKAGE__->path_to( 'root', 'src' ),
+        ],
+    },
+);
+        
+# Configure SimpleDB Authentication
+__PACKAGE__->config(
+    'Plugin::Authentication' => {
+        default => {
+            class           => 'SimpleDB',
+            user_model      => 'DB::User',
+            password_type   => 'self_check',
+        },
+    });
 
 # Start the application
 __PACKAGE__->setup();

@@ -5,8 +5,16 @@ use namespace::autoclean;
 extends 'Catalyst::View::TT';
 
 __PACKAGE__->config(
-    TEMPLATE_EXTENSION => '.tt',
-    render_die => 1,
+    # Change default TT extension
+    #TEMPLATE_EXTENSION => '.tt2',
+    #set the location for TT files
+    INCLUDE_PATH => [
+        HoneyDoPetSitting->path_to( 'root', 'src' ),
+      ],
+    #set to 1 for detailed timer stats in your HTML as comments
+    TIMER       => 0,
+    # this is your wrapper template located in the 'root/src'
+    WRAPPER => 'wrapper.tt2',
 );
 
 =head1 NAME

@@ -24,11 +24,15 @@ extends 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
+=item * L<DBIx::Class::PassphraseColumn>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
 
 =head1 TABLE: C<author>
 
@@ -105,8 +109,8 @@ Composing rels: L</book_authors> -> book
 __PACKAGE__->many_to_many("books", "book_authors", "book");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07038 @ 2013-12-07 16:41:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:On9NEQ1JENelA2GiBy2miQ
+# Created by DBIx::Class::Schema::Loader v0.07038 @ 2014-01-08 21:23:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nPzVob0H18XURR7ezS9E4A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -118,4 +122,14 @@ __PACKAGE__->meta->make_immutable;
 #     3) Name of belongs_to() relationship in model class of has_many() above
 #   You must already have the has_many() defined to use a many_to_many().
 #__PACKAGE__->many_to_many(books => 'book_authors', 'book');
+
+#
+# Row-level helper methods
+#
+sub full_name {
+    my ($self) = @_;
+
+    return $self->first_name . ' ' . $self->last_name;
+}
+
 1;

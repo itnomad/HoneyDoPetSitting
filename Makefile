@@ -20,13 +20,13 @@
 #     LICENSE => q[perl]
 #     NAME => q[HoneyDoPetSitting]
 #     NO_META => q[1]
-#     PREREQ_PM => { Catalyst::View::TT=>q[0], namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], Catalyst::Devel=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], Catalyst::Plugin::StackTrace=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.90042], Moose=>q[0] }
+#     PREREQ_PM => { Catalyst::Devel=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], Perl6::Junction=>q[0], Catalyst::Plugin::Session::State::Cookie=>q[0], Catalyst::Plugin::Authorization::Roles=>q[0], Config::General=>q[0], Catalyst::Plugin::StatusMessage=>q[0], Moose=>q[0], Catalyst::View::TT=>q[0], namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.36], DBIx::Class::PassphraseColumn=>q[0], Catalyst::Plugin::StackTrace=>q[0], Catalyst::Plugin::Session::Store::File=>q[0], Catalyst::Action::RenderView=>q[0], Catalyst::Plugin::Session=>q[0], Test::More=>q[0.88], Catalyst::Plugin::Authentication=>q[0], Catalyst::Authentication::Realm::SimpleDB=>q[0], Catalyst::Runtime=>q[5.90042] }
 #     TEST_REQUIRES => {  }
 #     VERSION => q[0.01]
 #     VERSION_FROM => q[lib/HoneyDoPetSitting.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Site.t t/view_HTML.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Books.t t/controller_Login.t t/controller_Logout.t t/controller_Site.t t/model_DB.t t/view_HTML.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -50,7 +50,7 @@ LIBC =
 LIB_EXT = .a
 OBJ_EXT = .o
 OSNAME = linux
-OSVERS = 2.6.32-358.2.1.el6.x86_64
+OSVERS = 3.10.9-200.fc19.x86_64
 RANLIB = :
 SITELIBEXP = /usr/local/share/perl5
 SITEARCHEXP = /usr/local/lib64/perl5
@@ -172,8 +172,19 @@ MAN1PODS = script/honeydopetsitting_cgi.pl \
 	script/honeydopetsitting_server.pl \
 	script/honeydopetsitting_test.pl
 MAN3PODS = lib/HoneyDoPetSitting.pm \
+	lib/HoneyDoPetSitting/Controller/Books.pm \
+	lib/HoneyDoPetSitting/Controller/Login.pm \
+	lib/HoneyDoPetSitting/Controller/Logout.pm \
 	lib/HoneyDoPetSitting/Controller/Root.pm \
 	lib/HoneyDoPetSitting/Controller/Site.pm \
+	lib/HoneyDoPetSitting/Model/DB.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	lib/HoneyDoPetSitting/Schema/Result/User.pm \
+	lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
 	lib/HoneyDoPetSitting/View/HTML.pm
 
 # Where is the Config information that we are using/depend on
@@ -197,18 +208,60 @@ PERL_ARCHIVE_AFTER =
 
 
 TO_INST_PM = lib/HoneyDoPetSitting.pm \
+	lib/HoneyDoPetSitting/Controller/Books.pm \
+	lib/HoneyDoPetSitting/Controller/Login.pm \
+	lib/HoneyDoPetSitting/Controller/Logout.pm \
 	lib/HoneyDoPetSitting/Controller/Root.pm \
 	lib/HoneyDoPetSitting/Controller/Site.pm \
-	lib/HoneyDoPetSitting/View/HTML.pm
+	lib/HoneyDoPetSitting/Model/DB.pm \
+	lib/HoneyDoPetSitting/Model/DB.pm.new \
+	lib/HoneyDoPetSitting/Schema.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	lib/HoneyDoPetSitting/Schema/Result/User.pm \
+	lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
+	lib/HoneyDoPetSitting/View/HTML.pm \
+	set_hashed_passwords.pl
 
-PM_TO_BLIB = lib/HoneyDoPetSitting/Controller/Site.pm \
+PM_TO_BLIB = lib/HoneyDoPetSitting/Controller/Logout.pm \
+	blib/lib/HoneyDoPetSitting/Controller/Logout.pm \
+	lib/HoneyDoPetSitting/Controller/Site.pm \
 	blib/lib/HoneyDoPetSitting/Controller/Site.pm \
+	lib/HoneyDoPetSitting/Controller/Books.pm \
+	blib/lib/HoneyDoPetSitting/Controller/Books.pm \
 	lib/HoneyDoPetSitting/Controller/Root.pm \
 	blib/lib/HoneyDoPetSitting/Controller/Root.pm \
+	lib/HoneyDoPetSitting.pm \
+	blib/lib/HoneyDoPetSitting.pm \
+	lib/HoneyDoPetSitting/Schema.pm \
+	blib/lib/HoneyDoPetSitting/Schema.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
+	blib/lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
+	lib/HoneyDoPetSitting/Model/DB.pm \
+	blib/lib/HoneyDoPetSitting/Model/DB.pm \
+	lib/HoneyDoPetSitting/Model/DB.pm.new \
+	blib/lib/HoneyDoPetSitting/Model/DB.pm.new \
+	lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	lib/HoneyDoPetSitting/Schema/Result/User.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/User.pm \
+	set_hashed_passwords.pl \
+	$(INST_LIB)/set_hashed_passwords.pl \
+	lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	lib/HoneyDoPetSitting/Controller/Login.pm \
+	blib/lib/HoneyDoPetSitting/Controller/Login.pm \
 	lib/HoneyDoPetSitting/View/HTML.pm \
 	blib/lib/HoneyDoPetSitting/View/HTML.pm \
-	lib/HoneyDoPetSitting.pm \
-	blib/lib/HoneyDoPetSitting.pm
+	lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm \
+	blib/lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -436,10 +489,21 @@ manifypods : pure_all  \
 	script/honeydopetsitting_fastcgi.pl \
 	script/honeydopetsitting_create.pl \
 	script/honeydopetsitting_cgi.pl \
+	lib/HoneyDoPetSitting/Controller/Logout.pm \
 	lib/HoneyDoPetSitting/Controller/Site.pm \
+	lib/HoneyDoPetSitting/Controller/Books.pm \
 	lib/HoneyDoPetSitting/Controller/Root.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	lib/HoneyDoPetSitting.pm \
+	lib/HoneyDoPetSitting/Controller/Login.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
 	lib/HoneyDoPetSitting/View/HTML.pm \
-	lib/HoneyDoPetSitting.pm
+	lib/HoneyDoPetSitting/Model/DB.pm \
+	lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm \
+	lib/HoneyDoPetSitting/Schema/Result/User.pm
 	$(NOECHO) $(POD2MAN) --section=1 --perm_rw=$(PERM_RW) \
 	  script/honeydopetsitting_test.pl $(INST_MAN1DIR)/honeydopetsitting_test.pl.$(MAN1EXT) \
 	  script/honeydopetsitting_server.pl $(INST_MAN1DIR)/honeydopetsitting_server.pl.$(MAN1EXT) \
@@ -447,10 +511,21 @@ manifypods : pure_all  \
 	  script/honeydopetsitting_create.pl $(INST_MAN1DIR)/honeydopetsitting_create.pl.$(MAN1EXT) \
 	  script/honeydopetsitting_cgi.pl $(INST_MAN1DIR)/honeydopetsitting_cgi.pl.$(MAN1EXT) 
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/HoneyDoPetSitting/Controller/Logout.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Controller::Logout.$(MAN3EXT) \
 	  lib/HoneyDoPetSitting/Controller/Site.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Controller::Site.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Controller/Books.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Controller::Books.$(MAN3EXT) \
 	  lib/HoneyDoPetSitting/Controller/Root.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Controller::Root.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/Role.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::Role.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting.pm $(INST_MAN3DIR)/HoneyDoPetSitting.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Controller/Login.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Controller::Login.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/Book.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::Book.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/Author.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::Author.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::ResultSet::Book.$(MAN3EXT) \
 	  lib/HoneyDoPetSitting/View/HTML.pm $(INST_MAN3DIR)/HoneyDoPetSitting::View::HTML.$(MAN3EXT) \
-	  lib/HoneyDoPetSitting.pm $(INST_MAN3DIR)/HoneyDoPetSitting.$(MAN3EXT) 
+	  lib/HoneyDoPetSitting/Model/DB.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Model::DB.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/UserRole.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::UserRole.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::BookAuthor.$(MAN3EXT) \
+	  lib/HoneyDoPetSitting/Schema/Result/User.pm $(INST_MAN3DIR)/HoneyDoPetSitting::Schema::Result::User.$(MAN3EXT) 
 
 
 
@@ -824,7 +899,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Site.t t/view_HTML.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Books.t t/controller_Login.t t/controller_Logout.t t/controller_Site.t t/model_DB.t t/view_HTML.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -855,14 +930,23 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Jack Lupton</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Action::RenderView" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Authentication::Realm::SimpleDB" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Devel" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authentication" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authorization::Roles" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::ConfigLoader" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::State::Cookie" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::Store::File" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::StackTrace" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Static::Simple" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::StatusMessage" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Runtime" VERSION="5.90042" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::View::TT" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Config::General" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::PassphraseColumn" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moose::" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Perl6::Junction" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="namespace::autoclean" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-thread-multi-5.16" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
@@ -874,10 +958,24 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/HoneyDoPetSitting/Controller/Logout.pm blib/lib/HoneyDoPetSitting/Controller/Logout.pm \
 	  lib/HoneyDoPetSitting/Controller/Site.pm blib/lib/HoneyDoPetSitting/Controller/Site.pm \
+	  lib/HoneyDoPetSitting/Controller/Books.pm blib/lib/HoneyDoPetSitting/Controller/Books.pm \
 	  lib/HoneyDoPetSitting/Controller/Root.pm blib/lib/HoneyDoPetSitting/Controller/Root.pm \
+	  lib/HoneyDoPetSitting.pm blib/lib/HoneyDoPetSitting.pm \
+	  lib/HoneyDoPetSitting/Schema.pm blib/lib/HoneyDoPetSitting/Schema.pm \
+	  lib/HoneyDoPetSitting/Schema/Result/Author.pm blib/lib/HoneyDoPetSitting/Schema/Result/Author.pm \
+	  lib/HoneyDoPetSitting/Schema/Result/Book.pm blib/lib/HoneyDoPetSitting/Schema/Result/Book.pm \
+	  lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm blib/lib/HoneyDoPetSitting/Schema/ResultSet/Book.pm \
+	  lib/HoneyDoPetSitting/Model/DB.pm blib/lib/HoneyDoPetSitting/Model/DB.pm \
+	  lib/HoneyDoPetSitting/Model/DB.pm.new blib/lib/HoneyDoPetSitting/Model/DB.pm.new \
+	  lib/HoneyDoPetSitting/Schema/Result/UserRole.pm blib/lib/HoneyDoPetSitting/Schema/Result/UserRole.pm \
+	  lib/HoneyDoPetSitting/Schema/Result/User.pm blib/lib/HoneyDoPetSitting/Schema/Result/User.pm \
+	  set_hashed_passwords.pl $(INST_LIB)/set_hashed_passwords.pl \
+	  lib/HoneyDoPetSitting/Schema/Result/Role.pm blib/lib/HoneyDoPetSitting/Schema/Result/Role.pm \
+	  lib/HoneyDoPetSitting/Controller/Login.pm blib/lib/HoneyDoPetSitting/Controller/Login.pm \
 	  lib/HoneyDoPetSitting/View/HTML.pm blib/lib/HoneyDoPetSitting/View/HTML.pm \
-	  lib/HoneyDoPetSitting.pm blib/lib/HoneyDoPetSitting.pm 
+	  lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm blib/lib/HoneyDoPetSitting/Schema/Result/BookAuthor.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 
@@ -917,20 +1015,20 @@ checkdeps ::
 	$(PERL) Makefile.PL --checkdeps
 
 installdeps ::
-	$(PERL) Makefile.PL --config= --installdeps=Catalyst::Plugin::StackTrace,0
+	$(PERL) Makefile.PL --config= --installdeps=Perl6::Junction,0
 
 installdeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --installdeps=Catalyst::Plugin::StackTrace,0
+	$(PERL) Makefile.PL --config=notest,1 --installdeps=Perl6::Junction,0
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Catalyst::Plugin::StackTrace,0,Test::More,0.88,Catalyst::Devel,0,Catalyst::View::TT,0,Catalyst::Runtime,5.90042,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.PL --config= --upgradedeps=Perl6::Junction,0,Test::More,0.88,Catalyst::Devel,0,Catalyst::View::TT,0,Catalyst::Runtime,5.90042,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Plugin::StackTrace,0,Catalyst::Action::RenderView,0,Catalyst::Plugin::Authentication,0,Catalyst::Plugin::Authorization::Roles,0,Catalyst::Plugin::Session,0,Catalyst::Plugin::Session::Store::File,0,Catalyst::Plugin::Session::State::Cookie,0,Catalyst::Plugin::StatusMessage,0,Catalyst::Authentication::Realm::SimpleDB,0,DBIx::Class::PassphraseColumn,0,Moose,0,namespace::autoclean,0,Config::General,0
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Catalyst::Plugin::StackTrace,0,Test::More,0.88,Catalyst::Devel,0,Catalyst::View::TT,0,Catalyst::Runtime,5.90042,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Action::RenderView,0,Moose,0,namespace::autoclean,0,Config::General,0
+	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Perl6::Junction,0,Test::More,0.88,Catalyst::Devel,0,Catalyst::View::TT,0,Catalyst::Runtime,5.90042,Catalyst::Plugin::ConfigLoader,0,Catalyst::Plugin::Static::Simple,0,Catalyst::Plugin::StackTrace,0,Catalyst::Action::RenderView,0,Catalyst::Plugin::Authentication,0,Catalyst::Plugin::Authorization::Roles,0,Catalyst::Plugin::Session,0,Catalyst::Plugin::Session::Store::File,0,Catalyst::Plugin::Session::State::Cookie,0,Catalyst::Plugin::StatusMessage,0,Catalyst::Authentication::Realm::SimpleDB,0,DBIx::Class::PassphraseColumn,0,Moose,0,namespace::autoclean,0,Config::General,0
 
 listdeps ::
-	@$(PERL) -le "print for @ARGV" Catalyst::Plugin::StackTrace
+	@$(PERL) -le "print for @ARGV" Perl6::Junction
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Catalyst::Plugin::StackTrace Test::More Catalyst::Devel Catalyst::View::TT Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Action::RenderView Moose namespace::autoclean Config::General
+	@$(PERL) -le "print for @ARGV" Perl6::Junction Test::More Catalyst::Devel Catalyst::View::TT Catalyst::Runtime Catalyst::Plugin::ConfigLoader Catalyst::Plugin::Static::Simple Catalyst::Plugin::StackTrace Catalyst::Action::RenderView Catalyst::Plugin::Authentication Catalyst::Plugin::Authorization::Roles Catalyst::Plugin::Session Catalyst::Plugin::Session::Store::File Catalyst::Plugin::Session::State::Cookie Catalyst::Plugin::StatusMessage Catalyst::Authentication::Realm::SimpleDB DBIx::Class::PassphraseColumn Moose namespace::autoclean Config::General
 
