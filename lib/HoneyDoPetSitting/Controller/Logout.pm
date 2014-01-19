@@ -24,6 +24,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
+
     # Clear the user's state
     $c->logout;
 

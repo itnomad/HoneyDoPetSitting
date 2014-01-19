@@ -36,6 +36,8 @@ sub index :Path :Args(0) {
         if ($c->authenticate({ username => $username,
                                 password => $password } )) {
             # If successful, then let them use the application
+            # testing debug chapter from the tutorial
+            $c->log->info("Successful Login");
             $c->response->redirect($c->uri_for(
                 $c->controller('Books')->action_for('list')));
             return;
